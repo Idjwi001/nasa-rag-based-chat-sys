@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Generated data (rebuild with embedding_pipeline.py / batch_evaluate.py)
+chroma_db*/
+chroma_embedding_text_only.log
+evaluation_results.json
+
+# Secrets / local config
+.env
+.streamlit/secrets.toml
+
+# OS
+.DS_Store

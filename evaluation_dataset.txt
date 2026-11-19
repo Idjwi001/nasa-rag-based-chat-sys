@@ -1,0 +1,102 @@
+# NASA Mission Intelligence - Evaluation Dataset
+#
+# Sample questions used to test the RAG chat system, with the response each one should
+# produce. Expected answers are written from the documents in data_text/ (the archive
+# line or document is noted where useful) so they can serve as references for BLEU / ROUGE.
+#
+# This file is loaded by batch_evaluate.py:
+#     python batch_evaluate.py --dataset evaluation_dataset.txt
+#
+# Format: each entry starts with "### Q<n>" and has these fields:
+#     Category:  overview | emergency | disaster analysis | crew | technical | timeline | grounding
+#     Mission:   apollo_11 | apollo_13 | challenger | all   (used as the retrieval filter)
+#     Question:  one line
+#     Expected:  one or more lines, up to the next "### " header
+# Lines starting with "#" outside an entry are comments.
+
+### Q1
+Category: overview
+Mission: apollo_11
+Question: What was the main objective of Apollo 11, and was it achieved?
+Expected: The objective was to land astronauts on the Moon and return them safely to Earth,
+meeting the national commitment made on May 25, 1961. Apollo 11 launched from Kennedy Space
+Center on July 16, 1969 with Neil Armstrong (Commander), Michael Collins (Command Module Pilot)
+and Edwin "Buzz" Aldrin (Lunar Module Pilot). The lunar module Eagle landed in the Sea of
+Tranquility at 102:45:40 GET on July 20, 1969 ("Houston, Tranquility Base here. The Eagle has
+landed."). Armstrong first stepped onto the surface at 109:24:15 GET, and the crew returned
+safely, so the objective was achieved.
+
+### Q2
+Category: emergency
+Mission: apollo_13
+Question: What problem did Apollo 13 encounter, and how did the crew first report it?
+Expected: At about 55:55 GET (02 07 55 in the technical air-to-ground transcript) the crew
+heard a loud bang and reported "Houston, we've had a problem," followed by a MAIN B BUS
+UNDERVOLT caution. The cause was the failure of oxygen tank no. 2 in the service module,
+which cut off the command module's oxygen and fuel-cell power. The lunar landing was
+cancelled, and the crew used the lunar module as a lifeboat to get home.
+
+### Q3
+Category: technical
+Mission: apollo_13
+Question: How did the Apollo 13 crew deal with rising carbon dioxide levels while living in the lunar module?
+Expected: The lunar module's own lithium hydroxide (LiOH) canisters could not remove carbon
+dioxide for three crewmen for the whole return trip, and the command module's square LiOH
+canisters did not fit the LM system. Mission Control read up a procedure for modifying a
+command module LiOH canister, using hoses, a plastic bag and tape, so it could be attached
+to the LM's suit hoses. With the improvised canisters the CO2 level came back down.
+
+### Q4
+Category: crew
+Mission: challenger
+Question: Who were the crew members of the Challenger STS-51L mission?
+Expected: According to the launch-day commentary, the seven crew members were commander
+Francis "Dick" Scobee, pilot Michael Smith, mission specialists Judith Resnik, Ellison
+Onizuka and Ronald McNair, payload specialist Gregory Jarvis, and teacher-in-space
+participant Christa McAuliffe, the first private citizen to fly on the shuttle.
+
+### Q5
+Category: disaster analysis
+Mission: challenger
+Question: What happened shortly after Challenger's launch, according to the mission audio?
+Expected: The main engines throttled down to about 65% and then back up to 104%, and
+Challenger was told "go at throttle up." Shortly after, at about 1 minute 15 seconds into
+flight (velocity about 2,900 ft/s, altitude about 9 nautical miles), the public affairs
+commentator said "Obviously a major malfunction." There was no downlink, the flight dynamics
+officer reported that the vehicle had exploded, and contingency procedures were put into
+effect. The transcripts do not explain the technical cause. The answer should say so, or
+clearly mark the solid rocket booster O-ring failure as general knowledge rather than
+archive content.
+
+### Q6
+Category: technical
+Mission: apollo_11
+Question: What was the 1202 program alarm during the Apollo 11 lunar descent, and how did Mission Control respond?
+Expected: During powered descent the crew reported "PROGRAM ALARM ... It's a 1202" and asked
+for a reading. Mission Control answered "We're GO on that alarm," and the descent continued.
+The mission report explains that 1202 was an Executive overflow alarm. Unneeded counter
+interrupts from the rendezvous radar coupling data unit used up computer time, so some
+scheduled routines could not finish and the computer did a software restart. The report
+says the alarms showed the guidance computer was working correctly, and that the radar
+interrupts would not be processed by the program used on later missions.
+
+### Q7
+Category: timeline
+Mission: apollo_13
+Question: What was the sequence of key events for Apollo 13 after the accident, through splashdown?
+Expected: After the oxygen tank failure the command module was powered down, and the crew
+moved into the lunar module, using it as a lifeboat. Burns of the lunar module descent
+engine put the spacecraft back on a trajectory to Earth around the Moon, and later midcourse
+corrections refined it. Near Earth the crew jettisoned the service module, powered up the
+command module and jettisoned the lunar module. Public affairs commentary gave the
+predicted entry times: entry interface at about 142:40:40 GET, drogue chutes at 142:48:53,
+main chutes at 142:49:43, and splashdown at about 142:54:40 GET in the Pacific.
+
+### Q8
+Category: grounding
+Mission: all
+Question: Who commanded the Gemini 4 mission?
+Expected: The NASA archive in this system covers only Apollo 11, Apollo 13 and Challenger
+STS-51L, so the retrieved documents do not answer this. The assistant should say the
+context is insufficient instead of making up an archive-based answer. If it adds that
+James McDivitt commanded Gemini 4, it must label this as general knowledge.
