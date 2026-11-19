@@ -36,6 +36,10 @@ pip install -r requirements.txt
 export OPENAI_API_KEY="your-api-key-here"
 ```
 
+**Udacity / Vocareum keys** (starting with `voc-`) work as is. When such a key is used and
+`OPENAI_BASE_URL` is not set, every component points the OpenAI clients at
+`https://openai.vocareum.com/v1` automatically. With a regular OpenAI key nothing changes.
+
 ### RAGAS 0.4.3: VertexAI import fix (required)
 
 RAGAS 0.4.3 imports `ChatVertexAI` and `VertexAI` from old `langchain-community` paths, so
@@ -103,7 +107,15 @@ answer shows its numbered sources and a score line, and the sidebar shows the la
 
 **How retrieval works.** The collection stores an OpenAI embedding function, so the question
 is embedded with the same model as the chunks. ChromaDB returns the nearest chunks by
-cosine distance. Twice top-k candidates are fetched, then sorted by distance and
+cosine distance.
+
+With "All missions" selected, a question that names exactly one mission (for example
+"What problems did Apollo 13 encounter?") is filtered to that mission automatically. Once a
+filter is active, the mission's name is removed from the text that gets embedded, as long
+as at least 4 words remain. Almost every chunk repeats its mission's name, so leaving it in
+pulled generic status-report chunks to the top. Removing it brings the narrative chunk
+describing the 55:58 GET oxygen tank failure to rank 1. The sources panel shows exactly
+which text and mission were searched. Twice top-k candidates are fetched, then sorted by distance and
 deduplicated, and the best top-k are kept. The context lists each chunk under a
 `[Source N] Mission | Document | Category | Chunk | Similarity` header with separators.
 
@@ -139,6 +151,34 @@ python batch_evaluate.py --dataset evaluation_dataset.txt --top-k 3
 The script prints each question's sources, answer and scores, then a table with mean, min,
 max and std for every metric. Detailed results go to `evaluation_results.json`. A JSON
 dataset (`[{"question", "expected", "mission", "category"}]`) also works.
+
+### Results (real run, `gpt-4.1-mini`, top-k 5, 9,340 chunks)
+
+Full per-question output, including answers, sources and scores, is in
+[`evaluation_results.json`](evaluation_results.json).
+
+| Metric | Mean | Min | Max |
+|--------|------|-----|-----|
+| Response Relevancy | 0.785 | 0.000 | 1.000 |
+| Faithfulness | 0.841 | 0.500 | 1.000 |
+| BLEU | 0.070 | 0.024 | 0.217 |
+| ROUGE-L | 0.226 | 0.127 | 0.338 |
+
+How to read these numbers:
+
+- **Q8 (Gemini 4, outside the archive) works as intended.** The model says the documents
+  don't cover it and labels McDivitt as general knowledge. RAGAS scores that kind of
+  "I don't know" answer as noncommittal, so its relevancy is 0, which lowers the mean.
+- **BLEU and ROUGE are low by nature.** They count word overlap with the reference answer,
+  and free-form answers word things differently even when the facts match.
+- **The data limits some answers.** Most of the archive is raw transcript, so questions that
+  need a narrative summary, such as the Q7 timeline, get partial answers.
+- **The scores vary between runs.** The LLM-judged metrics changed by a few hundredths
+  between identical runs. Before the query cleanup above, Q2 got a vague "oxygen flow"
+  answer. After it, Q2 names oxygen tank no. 2 failing at about 55:58 GET, while the
+  aggregates stayed within that noise (faithfulness 0.89 vs 0.84, relevancy 0.79 vs 0.79).
+
+![Chat screenshot](docs/chat_screenshot.png)
 
 RAGAS telemetry is disabled by default (`RAGAS_DO_NOT_TRACK=true`).
 

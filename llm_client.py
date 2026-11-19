@@ -1,10 +1,12 @@
 """OpenAI chat client for the NASA mission intelligence assistant."""
 
+import os
 from typing import Dict, List, Optional
 
 from openai import OpenAI
 
 DEFAULT_MODEL = "gpt-4.1-mini"
+VOCAREUM_BASE_URL = "https://openai.vocareum.com/v1"
 
 # Only the most recent turns are sent to keep each request focused and cheap.
 MAX_HISTORY_MESSAGES = 10
@@ -28,6 +30,16 @@ widely known background, but label it clearly as general knowledge, not archive 
 short key phrases (such as crew call-outs) when they make the answer clearer.
 5. Be accurate, clear and concise. Use mission elapsed times (GET) or dates when the \
 context provides them. Use short paragraphs or bullet points for multi-part answers."""
+
+
+def configure_openai_endpoint(api_key: Optional[str]) -> None:
+    """Point OpenAI clients at the Vocareum proxy when a Udacity ``voc-`` key is used.
+
+    Sets OPENAI_BASE_URL, which the openai SDK, langchain-openai and ChromaDB's
+    OpenAI embedding function all honour. An explicitly set OPENAI_BASE_URL wins.
+    """
+    if api_key and api_key.startswith("voc-") and not os.environ.get("OPENAI_BASE_URL"):
+        os.environ["OPENAI_BASE_URL"] = VOCAREUM_BASE_URL
 
 
 def _trim_history(conversation_history: Optional[List[Dict]],
@@ -101,6 +113,7 @@ def generate_response(openai_key: str, user_message: str, context: str,
 
     messages = build_messages(user_message, context, conversation_history)
 
+    configure_openai_endpoint(openai_key)
     client = OpenAI(api_key=openai_key)
     completion = client.chat.completions.create(
         model=model,

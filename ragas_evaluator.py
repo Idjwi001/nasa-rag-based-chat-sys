@@ -25,6 +25,8 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from ragas.embeddings import LangchainEmbeddingsWrapper
 from ragas.llms import LangchainLLMWrapper
 
+from llm_client import configure_openai_endpoint
+
 # RAGAS imports
 try:
     from ragas import SingleTurnSample
@@ -116,6 +118,7 @@ def evaluate_response_quality(question: str, answer: str, contexts: List[str],
     if not api_key:
         return {"error": "An OpenAI API key is required for RAGAS evaluation."}
 
+    configure_openai_endpoint(api_key)
     try:
         evaluator_llm, evaluator_embeddings = _evaluator_models(api_key)
     except Exception as e:

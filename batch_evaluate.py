@@ -170,6 +170,7 @@ def main() -> None:
     if not args.openai_key:
         parser.error("an OpenAI API key is required: pass --openai-key or set OPENAI_API_KEY")
     os.environ.setdefault("CHROMA_OPENAI_API_KEY", args.openai_key)
+    llm_client.configure_openai_endpoint(args.openai_key)
 
     try:
         dataset = load_evaluation_dataset(args.dataset)

@@ -2,6 +2,7 @@
 
 import logging
 import os
+import re
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -15,6 +16,14 @@ MISSION_ALIASES = {
     "apollo_11": "apollo_11", "apollo11": "apollo_11", "apollo 11": "apollo_11",
     "apollo_13": "apollo_13", "apollo13": "apollo_13", "apollo 13": "apollo_13",
     "challenger": "challenger", "sts-51l": "challenger", "sts_51l": "challenger",
+}
+
+# How each mission is written in user questions.
+MISSION_PATTERNS = {
+    "apollo_11": re.compile(r"\bapollo[\s_-]*(?:11|xi)\b", re.IGNORECASE),
+    "apollo_13": re.compile(r"\bapollo[\s_-]*(?:13|xiii)\b", re.IGNORECASE),
+    "challenger": re.compile(r"\b(?:space\s+shuttle\s+)?challenger(?:'s)?\b|\bsts[\s_-]*51[\s_-]*l\b",
+                             re.IGNORECASE),
 }
 
 MAX_DOC_CHARS = 1500  # per-chunk cap inside the LLM context
@@ -41,6 +50,39 @@ def normalize_mission(mission: Optional[str]) -> Optional[str]:
     if key in ("all", "all missions", "any", "none", ""):
         return None
     return MISSION_ALIASES.get(key, key.replace(" ", "_"))
+
+
+def detect_missions(query: str) -> List[str]:
+    """Return the missions named in a question, e.g. ['apollo_13']."""
+    return [mission for mission, pattern in MISSION_PATTERNS.items() if pattern.search(query or "")]
+
+
+def prepare_query(query: str, mission_filter: Optional[str] = None,
+                  auto_detect_mission: bool = True):
+    """Choose the mission filter and the text to embed for a question.
+
+    - With no filter, a question naming exactly one mission gets that mission's filter.
+    - With a filter, the mission's name is removed from the text to embed. Almost every
+      chunk of a mission repeats its name, so the name only adds noise to the similarity
+      ranking once results are restricted to that mission.
+
+    Returns:
+        Tuple (search_text, mission or None).
+    """
+    mission = normalize_mission(mission_filter)
+    if mission is None and auto_detect_mission:
+        mentioned = detect_missions(query)
+        if len(mentioned) == 1:
+            mission = mentioned[0]
+
+    search_text = query
+    if mission in MISSION_PATTERNS:
+        stripped = MISSION_PATTERNS[mission].sub(" ", query)
+        stripped = re.sub(r"\s+", " ", stripped).strip(" ,.;:-")
+        if len(re.findall(r"\w+", stripped)) >= 4:  # keep enough words to be meaningful
+            search_text = stripped
+
+    return search_text, mission
 
 
 def discover_chroma_backends(search_dir: str = ".") -> Dict[str, Dict[str, str]]:
@@ -136,31 +178,34 @@ def _deduplicate_results(results: Dict, n_results: int) -> Dict:
 
 
 def retrieve_documents(collection, query: str, n_results: int = 3,
-                       mission_filter: Optional[str] = None) -> Optional[Dict]:
+                       mission_filter: Optional[str] = None,
+                       auto_detect_mission: bool = True) -> Optional[Dict]:
     """Semantic search over the collection with optional mission filtering.
 
     The collection's OpenAI embedding function embeds the question, and ChromaDB
-    returns the nearest chunks. A few extra candidates are fetched so duplicate
-    snippets can be removed while still returning n_results hits.
+    returns the nearest chunks by cosine distance. A few extra candidates are fetched
+    so duplicate snippets can be removed while still returning n_results hits.
+
+    The result also holds "search_query" and "mission_filter", showing what was searched.
     """
     if collection is None or not query or not query.strip():
         return None
 
     n_results = max(1, int(n_results))
-
-    where_filter = None
-    mission = normalize_mission(mission_filter)
-    if mission:
-        where_filter = {"mission": mission}
+    search_text, mission = prepare_query(query, mission_filter, auto_detect_mission)
+    where_filter = {"mission": mission} if mission else None
 
     results = collection.query(
-        query_texts=[query],
+        query_texts=[search_text],
         n_results=n_results * 2,
         where=where_filter,
         include=["documents", "metadatas", "distances"],
     )
 
-    return _deduplicate_results(results, n_results)
+    deduplicated = _deduplicate_results(results, n_results)
+    deduplicated["search_query"] = search_text
+    deduplicated["mission_filter"] = mission
+    return deduplicated
 
 
 def _pretty(value: str) -> str:

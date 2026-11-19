@@ -138,11 +138,15 @@ def render_scores_inline(scores: Optional[Dict]):
         st.caption("📊 " + " · ".join(parts))
 
 
-def render_sources(sources: Optional[List[Dict]]):
+def render_sources(sources: Optional[List[Dict]], search: Optional[Dict] = None):
     """Expandable list of the retrieved chunks used for an answer."""
     if not sources:
         return
     with st.expander(f"📚 Sources ({len(sources)})"):
+        if search:
+            mission = search.get("mission_filter")
+            mission_text = mission.replace("_", " ").title() if mission else "all missions"
+            st.caption(f"Searched {mission_text} for: \"{search.get('search_query', '')}\"")
         for i, source in enumerate(sources, start=1):
             meta = source.get("metadata", {})
             mission = str(meta.get("mission", "unknown")).replace("_", " ").title()
@@ -150,8 +154,8 @@ def render_sources(sources: Optional[List[Dict]]):
             sim_text = f" · similarity {similarity:.3f}" if similarity is not None else ""
             st.markdown(f"**[Source {i}] {mission}** · `{meta.get('source', 'unknown')}` "
                         f"· chunk {meta.get('chunk_index', '?')}{sim_text}")
-            text = source.get("text", "")
-            st.text(text[:600] + ("..." if len(text) > 600 else ""))
+            text = " ".join(source.get("text", "").split())
+            st.caption(text[:500] + ("..." if len(text) > 500 else ""))
 
 
 def main():
@@ -206,6 +210,7 @@ def main():
         else:
             # Used by the collection's persisted OpenAI embedding function for queries.
             os.environ["CHROMA_OPENAI_API_KEY"] = openai_key
+            llm_client.configure_openai_endpoint(openai_key)
 
         model_choice = st.selectbox(
             "OpenAI Model",
@@ -217,7 +222,8 @@ def main():
         mission_label = st.selectbox(
             "Mission focus",
             options=list(MISSION_OPTIONS.keys()),
-            help="Restrict retrieval to one mission using metadata filtering"
+            help="Restrict retrieval to one mission using metadata filtering. With "
+                 "'All missions', a question naming exactly one mission is filtered to it."
         )
         mission_filter = MISSION_OPTIONS[mission_label]
         n_docs = st.slider("Documents to retrieve (top-k)", 1, 10, 3)
@@ -255,7 +261,7 @@ def main():
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
             if message["role"] == "assistant":
-                render_sources(message.get("sources"))
+                render_sources(message.get("sources"), message.get("search"))
                 render_scores_inline(message.get("evaluation"))
 
     # Chat input
@@ -266,6 +272,7 @@ def main():
 
         evaluation_scores = None
         sources: List[Dict] = []
+        search_info: Optional[Dict] = None
 
         with st.chat_message("assistant"):
             with st.spinner("Searching documents and generating response..."):
@@ -273,6 +280,9 @@ def main():
 
                 context = ""
                 contexts_list: List[str] = []
+                if docs_result:
+                    search_info = {"search_query": docs_result.get("search_query"),
+                                   "mission_filter": docs_result.get("mission_filter")}
                 if docs_result and docs_result.get("documents") and docs_result["documents"][0]:
                     documents = docs_result["documents"][0]
                     metadatas = docs_result["metadatas"][0]
@@ -296,7 +306,7 @@ def main():
                     model_choice
                 )
             st.markdown(response)
-            render_sources(sources)
+            render_sources(sources, search_info)
 
             if enable_evaluation and RAGAS_AVAILABLE:
                 with st.spinner("Evaluating response quality..."):
@@ -308,6 +318,7 @@ def main():
             "role": "assistant",
             "content": response,
             "sources": sources,
+            "search": search_info,
             "evaluation": evaluation_scores,
         })
         st.rerun()

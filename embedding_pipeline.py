@@ -29,6 +29,8 @@ from chromadb.config import Settings
 from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
 from openai import OpenAI
 
+from llm_client import configure_openai_endpoint
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -68,6 +70,7 @@ class ChromaEmbeddingPipelineTextOnly:
         if not openai_api_key:
             raise ValueError("An OpenAI API key is required (use --openai-key or OPENAI_API_KEY)")
 
+        configure_openai_endpoint(openai_api_key)
         self.openai_client = OpenAI(api_key=openai_api_key)
 
         self.chroma_persist_directory = chroma_persist_directory

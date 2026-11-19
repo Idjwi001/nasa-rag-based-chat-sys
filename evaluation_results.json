@@ -1,0 +1,209 @@
+{
+  "config": {
+    "dataset": "evaluation_dataset.txt",
+    "model": "gpt-4.1-mini",
+    "top_k": 5,
+    "mission_filter": true,
+    "collection": "nasa_space_missions_text"
+  },
+  "results": [
+    {
+      "id": "Q1",
+      "category": "overview",
+      "mission": "apollo_11",
+      "question": "What was the main objective of Apollo 11, and was it achieved?",
+      "expected": "The objective was to land astronauts on the Moon and return them safely to Earth, meeting the national commitment made on May 25, 1961. Apollo 11 launched from Kennedy Space Center on July 16, 1969 with Neil Armstrong (Commander), Michael Collins (Command Module Pilot) and Edwin \"Buzz\" Aldrin (Lunar Module Pilot). The lunar module Eagle landed in the Sea of Tranquility at 102:45:40 GET on July 20, 1969 (\"Houston, Tranquility Base here. The Eagle has landed.\"). Armstrong first stepped onto the surface at 109:24:15 GET, and the crew returned safely, so the objective was achieved.",
+      "answer": "The main objective of Apollo 11 was the lunar landing and safe return of the crew to Earth. This primary objective was successfully met during the mission. In addition to this, there were 11 secondary objectives related to selenological inspection, sampling, and assessing human and equipment capabilities on the lunar surface. All secondary objectives and experiments were fully satisfied except for two: the precise location of the landed lunar module and the lunar field geology experiment, which were not completely satisfied as planned before flight [Source 1, Source 2].\n\nThus, the single primary objective of Apollo 11 was achieved successfully [Source 2].",
+      "sources": [
+        "apollo_11/NASA_NTRS_Archive_19710015566_textract_full_text#581",
+        "apollo_11/NASA_NTRS_Archive_19710015566_textract_full_text#580",
+        "apollo_11/19900066485_textract_full_text#517",
+        "apollo_11/NASA_NTRS_Archive_19710015566_textract_full_text#513",
+        "apollo_11/NASA_NTRS_Archive_19710015566_textract_full_text#416"
+      ],
+      "scores": {
+        "response_relevancy": 0.9958,
+        "faithfulness": 0.8571,
+        "bleu_score": 0.059,
+        "rouge_score": 0.2289
+      }
+    },
+    {
+      "id": "Q2",
+      "category": "emergency",
+      "mission": "apollo_13",
+      "question": "What problem did Apollo 13 encounter, and how did the crew first report it?",
+      "expected": "At about 55:55 GET (02 07 55 in the technical air-to-ground transcript) the crew heard a loud bang and reported \"Houston, we've had a problem,\" followed by a MAIN B BUS UNDERVOLT caution. The cause was the failure of oxygen tank no. 2 in the service module, which cut off the command module's oxygen and fuel-cell power. The lunar landing was cancelled, and the crew used the lunar module as a lifeboat to get home.",
+      "answer": "Apollo 13 encountered a critical problem when there was a rapid drop in pressure in the service module liquid oxygen tank number 2, which led to failures in fuel cells 1 and 3. The crew first reported this issue at about 55 hours and 58 minutes ground elapsed time, initially noting an under voltage alarm on the command module main bus B. This under voltage alarm was their first indication that something was wrong. Following this, the pressure drop and fuel cell failures prompted a decision to abort the lunar landing and continue with a lunar fly-by deep space abort mission, using the lunar module as a lifeboat for life support to return to Earth [Source 2].",
+      "sources": [
+        "apollo_13/AS13_PAO_textract_full_text#1395",
+        "apollo_13/AS13_PAO_textract_full_text#678",
+        "apollo_13/AS13_PAO_textract_full_text#1021",
+        "apollo_13/AS13_PAO_textract_full_text#810",
+        "apollo_13/AS13_TEC_textract_full_text#140"
+      ],
+      "scores": {
+        "response_relevancy": 0.7277,
+        "faithfulness": 1.0,
+        "bleu_score": 0.0877,
+        "rouge_score": 0.2714
+      }
+    },
+    {
+      "id": "Q3",
+      "category": "technical",
+      "mission": "apollo_13",
+      "question": "How did the Apollo 13 crew deal with rising carbon dioxide levels while living in the lunar module?",
+      "expected": "The lunar module's own lithium hydroxide (LiOH) canisters could not remove carbon dioxide for three crewmen for the whole return trip, and the command module's square LiOH canisters did not fit the LM system. Mission Control read up a procedure for modifying a command module LiOH canister, using hoses, a plastic bag and tape, so it could be attached to the LM's suit hoses. With the improvised canisters the CO2 level came back down.",
+      "answer": "The Apollo 13 crew dealt with rising carbon dioxide (CO2) levels in the lunar module by monitoring the partial pressure of CO2 and changing to backup lithium hydroxide canisters when the level reached 15 millimeters of mercury. The onboard CO2 reading was used as the primary indication because it was considered more accurate, and at one point the CO2 level was about 13 mm Hg. To address the CO2 buildup, a procedure was passed to astronaut Fred Haise for keeping tabs on the rising CO2 and for switching to the backup lithium hydroxide canister as needed [Source 1].\n\nAdditionally, the crew rigged up a device to reduce the CO2 quantity significantly, from slightly over 1 millimeter down to 1/10th of a millimeter, effectively scrubbing the atmosphere. This device involved adapting the lunar module's suit system return hoses to use two lithium hydroxide canisters to scrub the atmosphere and remove carbon dioxide. This was primarily a backup solution for when the lunar module's canisters ran out [Sources 2, 4].\n\nAt the time of the last report, the CO2 level telemetered back to the ground was about 0.4 millimeters of mercury, indicating that the measures were effective in maintaining safe CO2 levels inside the lunar module [Source 5].",
+      "sources": [
+        "apollo_13/AS13_PAO_textract_full_text#985",
+        "apollo_13/AS13_PAO_textract_full_text#1095",
+        "apollo_13/AS13_PAO_textract_full_text#678",
+        "apollo_13/AS13_PAO_textract_full_text#1483",
+        "apollo_13/AS13_PAO_textract_full_text#1763"
+      ],
+      "scores": {
+        "response_relevancy": 0.97,
+        "faithfulness": 0.9231,
+        "bleu_score": 0.0383,
+        "rouge_score": 0.1812
+      }
+    },
+    {
+      "id": "Q4",
+      "category": "crew",
+      "mission": "challenger",
+      "question": "Who were the crew members of the Challenger STS-51L mission?",
+      "expected": "According to the launch-day commentary, the seven crew members were commander Francis \"Dick\" Scobee, pilot Michael Smith, mission specialists Judith Resnik, Ellison Onizuka and Ronald McNair, payload specialist Gregory Jarvis, and teacher-in-space participant Christa McAuliffe, the first private citizen to fly on the shuttle.",
+      "answer": "The crew members of the Challenger STS-51L mission were:\n\n- Commander: Dick Scobee (also referred to as Dick Kirby in one source, likely a transcription error)  \n- Pilot: Mike Smith  \n- Mission Specialists: Judy Resnick, Ellison Onizuka, Ron McNair  \n- Payload Specialist: Greg Jarvis  \n- Teacher and space participant (Payload Specialist): Christa McAuliffe  \n\nThis is confirmed by multiple references in the transcripts, for example: \"Dick Scoby is the commander... Mike Smith is the pilot... Mission specialists Judy Resnick Alison and Ron McNair... payload specialist Greg Jarvis... including teacher and space participant... Krista McAuliffe\" [Source 1, Source 2, Source 4].",
+      "sources": [
+        "challenger/108-AAG_STS-51L_Mission_Audio_transcript#34",
+        "challenger/108-AAG_STS-51L_Mission_Audio_transcript#28",
+        "challenger/109-AAG_STS-51L_Mission_Audio_transcript#30",
+        "challenger/108-AAG_STS-51L_Mission_Audio_transcript#41",
+        "challenger/107-AAG_STS-51L_Mission_Audio_transcript#29"
+      ],
+      "scores": {
+        "response_relevancy": 1.0,
+        "faithfulness": 0.7059,
+        "bleu_score": 0.0332,
+        "rouge_score": 0.338
+      }
+    },
+    {
+      "id": "Q5",
+      "category": "disaster analysis",
+      "mission": "challenger",
+      "question": "What happened shortly after Challenger's launch, according to the mission audio?",
+      "expected": "The main engines throttled down to about 65% and then back up to 104%, and Challenger was told \"go at throttle up.\" Shortly after, at about 1 minute 15 seconds into flight (velocity about 2,900 ft/s, altitude about 9 nautical miles), the public affairs commentator said \"Obviously a major malfunction.\" There was no downlink, the flight dynamics officer reported that the vehicle had exploded, and contingency procedures were put into effect. The transcripts do not explain the technical cause. The answer should say so, or clearly mark the solid rocket booster O-ring failure as general knowledge rather than archive content.",
+      "answer": "Shortly after Challenger's launch, approximately one minute into the flight, there was an apparent explosion of the orbiter. Data was lost at that time, which was shortly after the throttle up to 104% of the three main engines. Tracking crews reported that the vehicle appeared to have exploded and impacted the water downrange at about 28.64 degrees north, 80.28 degrees west. Prior to the explosion, the ascent phase appeared normal through the completion of the roll program and engine throttle adjustments. Flight controllers reported no anomalous indications with the engines or solid rocket boosters before the incident [Source 4][Source 5].",
+      "sources": [
+        "challenger/108-AAG_STS-51L_Mission_Audio_transcript#0",
+        "challenger/109-AAG_STS-51L_Mission_Audio_transcript#0",
+        "challenger/107-AAG_STS-51L_Mission_Audio_transcript#0",
+        "challenger/108-AAG_STS-51L_Mission_Audio_transcript#167",
+        "challenger/108-AAG_STS-51L_Mission_Audio_transcript#165"
+      ],
+      "scores": {
+        "response_relevancy": 0.8133,
+        "faithfulness": 0.9,
+        "bleu_score": 0.0586,
+        "rouge_score": 0.2029
+      }
+    },
+    {
+      "id": "Q6",
+      "category": "technical",
+      "mission": "apollo_11",
+      "question": "What was the 1202 program alarm during the Apollo 11 lunar descent, and how did Mission Control respond?",
+      "expected": "During powered descent the crew reported \"PROGRAM ALARM ... It's a 1202\" and asked for a reading. Mission Control answered \"We're GO on that alarm,\" and the descent continued. The mission report explains that 1202 was an Executive overflow alarm. Unneeded counter interrupts from the rendezvous radar coupling data unit used up computer time, so some scheduled routines could not finish and the computer did a software restart. The report says the alarms showed the guidance computer was working correctly, and that the radar interrupts would not be processed by the program used on later missions.",
+      "answer": "The 1202 program alarm during the Apollo 11 lunar descent was an unexpected alarm indicating an overload of the lunar module guidance computer. Despite these alarms, the computer was still performing proper navigation functions.\n\nMission Control assessed the situation in real-time and determined that the alarms did not occur continually and did not prevent continuation of the flight. They decided to continue the descent because the guidance computer was still functioning correctly. This decision was based on the accurate assessment of the computer overload and the information provided to the flight crew, which allowed the descent to proceed safely [Source 1, Source 3].\n\nAdditionally, after the landing, checklist changes were recommended to prevent similar alarms during ascent, such as keeping the rendezvous radar off during the ascent firing and not placing the MODE-SELECT switch in the PRIMARY GUIDANCE position to avoid generating altitude and altitude rate telemetry alarms [Source 1].",
+      "sources": [
+        "apollo_11/NASA_NTRS_Archive_19710015566_textract_full_text#564",
+        "apollo_11/NASA_NTRS_Archive_19710015566_textract_full_text#169",
+        "apollo_11/NASA_NTRS_Archive_19710015566_textract_full_text#562",
+        "apollo_11/NASA_NTRS_Archive_19710015566_textract_full_text#168",
+        "apollo_11/NASA_NTRS_Archive_19710015566_textract_full_text#358"
+      ],
+      "scores": {
+        "response_relevancy": 0.8862,
+        "faithfulness": 0.8667,
+        "bleu_score": 0.0462,
+        "rouge_score": 0.2088
+      }
+    },
+    {
+      "id": "Q7",
+      "category": "timeline",
+      "mission": "apollo_13",
+      "question": "What was the sequence of key events for Apollo 13 after the accident, through splashdown?",
+      "expected": "After the oxygen tank failure the command module was powered down, and the crew moved into the lunar module, using it as a lifeboat. Burns of the lunar module descent engine put the spacecraft back on a trajectory to Earth around the Moon, and later midcourse corrections refined it. Near Earth the crew jettisoned the service module, powered up the command module and jettisoned the lunar module. Public affairs commentary gave the predicted entry times: entry interface at about 142:40:40 GET, drogue chutes at 142:48:53, main chutes at 142:49:43, and splashdown at about 142:54:40 GET in the Pacific.",
+      "answer": "The retrieved documents focus primarily on the recovery phase of Apollo 13 after splashdown, rather than the entire sequence of key events following the accident. However, from the provided context, we can outline the sequence of key events related to the final phase of the mission after the accident, leading up to and including splashdown and crew recovery:\n\n1. **Splashdown and Parachute Deployment:**\n   - The command module splashed down in the ocean. At splashdown, the three main parachutes were deployed and displaced in the water, indicating a successful descent under parachutes [Source 1].\n\n2. **Recovery Operations Begin:**\n   - Recovery swimmers approached the command module. The inflation of the platform of the egress raft was completed and satisfactory [Source 2].\n   - Two swimmers were in the egress raft, with two more standing by in the water [Source 2].\n\n3. **Crew Egress from Command Module:**\n   - The swim leader opened the crew access hatch, which was completely opened.\n   - The first astronaut climbed out of the command module into the egress raft, followed by the second astronaut assisted by swim leaders [Source 3].\n   - The third astronaut was standing on the flotation collar of the egress raft [Source 3].\n\n4. **Securing the Hatch and Preparing for Hoist:**\n   - The swim leader made a final check before closing the access hatch, which was then secured [Source 3].\n   - The rescue net was deployed and positioned in the egress raft to assist in lifting the astronauts [Source 3].\n   - The three Apollo 13 crewmembers were hoisted into the recovery helicopter using the Billie Pugh net, a device resembling a half birdcage [Source 4].\n\n5. **Additional Recovery Details:**\n   - Recovery swimmers grappled with the parachutes to secure them [Source 5].\n   - The command module was noted to be drifting slightly at splashdown [Source 5].\n\nThe documents do not provide detailed information on the events immediately following the accident (such as the oxygen tank explosion, use of the Lunar Module as a lifeboat, or course corrections) but focus on the successful splashdown and recovery operations.\n\nIn summary, the key post-accident events covered here are the splashdown under three parachutes, swimmer approach and raft deployment, crew egress from the command module, securing the hatch, and hoisting the astronauts into the recovery helicopter [Sources 1-5].",
+      "sources": [
+        "apollo_13/AS13_TEC_textract_full_text#1694",
+        "apollo_13/AS13_PAO_textract_full_text#1985",
+        "apollo_13/AS13_PAO_textract_full_text#1988",
+        "apollo_13/AS13_PAO_textract_full_text#1986",
+        "apollo_13/AS13_PAO_textract_full_text#1976"
+      ],
+      "scores": {
+        "response_relevancy": 0.8888,
+        "faithfulness": 0.973,
+        "bleu_score": 0.0235,
+        "rouge_score": 0.1266
+      }
+    },
+    {
+      "id": "Q8",
+      "category": "grounding",
+      "mission": "all",
+      "question": "Who commanded the Gemini 4 mission?",
+      "expected": "The NASA archive in this system covers only Apollo 11, Apollo 13 and Challenger STS-51L, so the retrieved documents do not answer this. The assistant should say the context is insufficient instead of making up an archive-based answer. If it adds that James McDivitt commanded Gemini 4, it must label this as general knowledge.",
+      "answer": "The retrieved documents do not cover who commanded the Gemini 4 mission. \n\nGeneral knowledge: The Gemini 4 mission was commanded by astronaut James McDivitt.",
+      "sources": [
+        "apollo_11/a11transcript_pao_textract_full_text#833",
+        "apollo_13/AS13_PAO_textract_full_text#1870",
+        "apollo_11/a11transcript_pao_textract_full_text#25",
+        "apollo_11/19900066485_textract_full_text#2",
+        "apollo_13/AS13_PAO_textract_full_text#865"
+      ],
+      "scores": {
+        "response_relevancy": 0.0,
+        "faithfulness": 0.5,
+        "bleu_score": 0.2173,
+        "rouge_score": 0.25
+      }
+    }
+  ],
+  "aggregate": {
+    "response_relevancy": {
+      "mean": 0.7852,
+      "min": 0.0,
+      "max": 1.0,
+      "std": 0.3095,
+      "n": 8
+    },
+    "faithfulness": {
+      "mean": 0.8407,
+      "min": 0.5,
+      "max": 1.0,
+      "std": 0.1535,
+      "n": 8
+    },
+    "bleu_score": {
+      "mean": 0.0705,
+      "min": 0.0235,
+      "max": 0.2173,
+      "std": 0.0585,
+      "n": 8
+    },
+    "rouge_score": {
+      "mean": 0.226,
+      "min": 0.1266,
+      "max": 0.338,
+      "std": 0.0591,
+      "n": 8
+    }
+  }
+}
